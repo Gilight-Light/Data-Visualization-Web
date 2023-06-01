@@ -7,6 +7,15 @@ app = Dash()
 server = app.server
 
 def fix_km(x):
+    """
+       Removes the ' Km' string and commas from the input string.
+
+       Parameters:
+       x (str): The input string to be processed.
+
+       Returns:
+       str: The processed string with ' Km' and commas removed.
+    """
     return x.replace(" Km","").replace(",","")
 
 # Đọc dữ liệu từ file car.csv
@@ -53,6 +62,15 @@ for area in fr_area_df['area']:
 
 # Tầm nhìn sale
 def split_km(x):
+    """
+       Splits the input string and returns the first element after removing commas.
+
+       Parameters:
+       x (str): The input string to be split and processed.
+
+       Returns:
+       str: The first element of the split string with commas removed.
+    """
     a = x.split();
     a[0] = a[0].replace(',', '')
     return a[0]
@@ -191,7 +209,7 @@ app.layout = html.Div(
                                 "letterSpacing": "1px",
                                 "margin": "20px"}),
                 dcc.Graph(id="pie_chart"),
-                html.Div("Color Category Scale Chart",
+                html.Div("Type Of Car",
                          style={"textAlign": "center",
                                 "color": "#1877F2",
                                 "fontFamily": "Helvetica Neue,Helvetica,Arial,sans-serif",
@@ -223,6 +241,22 @@ app.layout = html.Div(
     Input('car_brand_dropdown','value'),Input('car_type_dropdown','value'),Input('from_are_dropdown','value'),Input('from_year','value'),Input('to_year','value')
 )
 def update_charts(car_brand_dropdown,car_type_dropdown,from_are_dropdown,from_year,to_year):
+    """
+        Update the charts based on the selected filters.
+
+        Parameters:
+        - car_brand_dropdown (list): Selected car brands.
+        - car_type_dropdown (str): Selected car type (imported or domestic).
+        - from_are_dropdown (str): Selected distribution area.
+        - from_year (int): Starting year filter.
+        - to_year (int): Ending year filter.
+
+        Returns:
+        - fig_histogram (plotly.graph_objects.Figure): Updated histogram chart.
+        - fig_pie (plotly.graph_objects.Figure): Updated color category scale chart.
+        - fig_pie_from (plotly.graph_objects.Figure): Updated type of car chart.
+        - fig_pie_sale (plotly.graph_objects.Figure): Updated sales rate based on sales promotion criteria chart.
+    """
     f_df = car_df[car_df.car_year != "< 1990"]
     if len(car_brand_dropdown) > 0:
         f_df = f_df[f_df.car_model.isin(car_brand_dropdown)]
